@@ -13,3 +13,15 @@ URL: https://www.youtube.com/c/sentdex/about
 Description: We followed this tutorial and used it as a reference for using
 pickling with python sockets
 """
+import socket
+import pickle
+
+class micro_server:
+    
+    self.__init__():
+        self.__HEAD = 64 # header of 64 bytes for message protocol
+        self.__PORT = 5467
+        self.__IP = socket.gethostbyname(socket.gethostname())
+        self.__socket = self.define_micro_socket()
+        self.start_listening()
+
