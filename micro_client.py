@@ -1,8 +1,15 @@
-import socket
+"""
+Sources Cited:
+Title: Python Socket Programming Tutorial
+Author: Tech With Tim
+URL: https://www.youtube.com/watch?v=3QiPPX-KeSc&t=2593s
+Description: We followed this tutorial and used/refactored the code into our
+own implementation to build the server as a prtable class.
 
-s = socket.socket(socket.AF_INET, socket.SOCK_STREAM) # define socket
-s.connect((socket.gethostname(), 5467)) # bind socket to localhost:5000
-
-msg = s.recv(1024) # buffer size 1024
-s.close()
-print(msg.decode("utf-8"))
+Sources Cited:
+Title: Sockets Tutorial with Python 3 part 3 - sending and receiving Python Objects w/ Pickle
+Author: HSKinsley (Sentdex)
+URL: https://www.youtube.com/c/sentdex/about
+Description: We followed this tutorial and used it as a reference for using
+pickling with python sockets
+"""
