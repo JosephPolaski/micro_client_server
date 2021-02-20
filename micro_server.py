@@ -18,11 +18,13 @@ import pickle
 
 class micro_server:
     
-    self.__init__():
+    self.__init__(self, call_back):
         self.__HEAD = 64 # header of 64 bytes for message protocol 
         self.__PORT = 5467
         self.__IP = socket.gethostbyname(socket.gethostname())
         self.__socket = self.define_micro_socket()
+        self.__disconnect_msg = "&END"
+        self.__call_back = call_back # call back function to process request
         self.start_listening()     
      
     def define_micro_socket(self):
@@ -45,7 +47,12 @@ class micro_server:
         connected = True
         while connected:
             # fetch length of incoming message from header
-            data_length = self.get_data_length()            
+            data_length = self.get_data_length()
+
+            # fetch incoming request
+            request = self.get_actual_data(data_length) 
+
+            client.close() if request == self.__disconnect_msg else self.__call_back(request)           
     
     def get_data_length(self):
         """helper to handle_client_requests()"""
@@ -60,9 +67,8 @@ class micro_server:
     def get_actual_data(self, data_length):
          """helper to handle_client_requests()"""
         # blocks until request data recieved
-        raw_data = client.recv(data_length).decode('utf-8')
-
-        # cast decoded header as integer length
+        request = client.recv(data_length).decode('utf-8')    
+        return request
         
 
     
