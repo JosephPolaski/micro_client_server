@@ -16,21 +16,21 @@ pickling with python sockets
 import socket
 import pickle
 
+
 class micro_server:
-    
-    self.__init__(self, call_back):
-        self.__HEAD = 64 # header of 64 bytes for message protocol 
+    def __init__(self):
+        #self.__init__():
+        self.__HEAD = 64  # header of 64 bytes for message protocol
         self.__PORT = 5467
         self.__IP = socket.gethostbyname(socket.gethostname())
+        self.__ADDR = (self.__IP, self.__PORT)
         self.__socket = self.define_micro_socket()
-        self.__disconnect_msg = "&END"
-        self.__call_back = call_back # call back function to process request
-        self.start_listening()     
-     
+        self.start_listening()
+    
     def define_micro_socket(self):
         """Create and bind socket to port 5467"""
         micro_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        micro_socket.bind(self.__IP, self.__Port)) 
+        micro_socket.bind(self.__ADDR)
         return micro_socket
 
     def start_listening(self):
@@ -39,37 +39,43 @@ class micro_server:
         while True:
             # blocks until connection to socket is detected
             client, address = self.__socket.accept()
-            handle_client_requests(client, address)
+            self.handle_client_requests(client, address)
 
     def handle_client_requests(self, client, address):
         print(f"New Connection from {address}")
-
+        
         connected = True
         while connected:
             # fetch length of incoming message from header
-            data_length = self.get_data_length()
+            data_length = self.get_data_length(client)
 
-            # fetch incoming request
-            request = self.get_actual_data(data_length) 
-
-            client.close() if request == self.__disconnect_msg else self.__call_back(request)           
-    
-    def get_data_length(self):
+    def get_data_length(self, client):
         """helper to handle_client_requests()"""
         # blocks until request header recieved
-        data_length = client.recv(self.__HEAD).decode('utf-8')
-
-        # cast decoded header as integer length
-        data_length = int(data_length)
-
-        return data_length 
-    
-    def get_actual_data(self, data_length):
-         """helper to handle_client_requests()"""
-        # blocks until request data recieved
-        request = client.recv(data_length).decode('utf-8')    
-        return request
+        data = client.recv(self.__HEAD).decode('utf-8')
+        print(data) # TAKE OUT
         
+        # cast decoded header as integer length
+        data_length = int(len(data))
+        print(data_length) # TAKE OUT
+        
+        return data_length, data
+    
+    def get_actual_data(self, client, data):
+        """helper to handle_client_requests()"""
+        # blocks until request data recieved
+        raw_data = client.recv(data).decode('utf-8')
+        
+        return raw_data
+
+
+def main():
+    server = micro_server()
+# data_len, text = server.get_data_length()
+# print(data_len)
+# print(text)
+
+main()
 
     
 
