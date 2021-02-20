@@ -1,4 +1,11 @@
 """
+micro_server.py
+
+This module contains the definition of the micro_server class that
+will listen for requests from other microservices on the port specified 
+and initialization. These ports are defined in the STDPORTS dictionary.
+each different microservice will listen on its own individual port.
+
 Sources Cited:
 Title: Python Socket Programming Tutorial
 Author: Tech With Tim
@@ -19,23 +26,19 @@ import pickle
 
 class micro_server:
     
-    def __init__(self, call_back):
-        self.define_data_members(call_back)
-        self.start_listening()
-
-    def define_data_members(self, call_back):
-        self.define_address_members()
-
-        # define end protocol, call back function and socket
-        self.__DCON = "&END"
-        self.__call_back = call_back
-        self.__socket = self.define_micro_socket()
-    
-    def define_address_members(self):
-        self.__HEAD = 64  # header of 64 bytes for message protocol
-        self.__PORT = 5467
+    def __init__(self, call_back, MSERVICE):
+        self.__STDPORTS = {'LIFE_GEN': 5467, 'CONT_GEN': 5468, 'POP_GEN': 5479, 'PERS_GEN': 5480}
+        
+        # address data members        
+        self.__PORT = self.__STDPORTS[MSERVICE]
         self.__IP = socket.gethostbyname(socket.gethostname())
         self.__ADDR = (self.__IP, self.__PORT)
+
+        # functional data members        
+        self.__HEAD = 64  # header of 64 bytes for message protocol
+        self.__DCON = "&END"
+        self.__call_back = call_back
+        self.__socket = self.define_micro_socket()           
     
     def define_micro_socket(self):
         """Create and bind socket to port 5467"""
@@ -89,7 +92,8 @@ if __name__ == "__main__":
     def call_back(request):
         print(f'request is {request}')
 
-    server = micro_server(call_back)
+    server = micro_server(call_back, 'LIFE_GEN') # create a life generator server
+    server.start_listening()
 
 
     

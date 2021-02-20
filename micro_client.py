@@ -18,14 +18,18 @@ import pickle
 
 
 class micro_client:
-    def __init__(self):
-        #self.__init__():
-        self.__HEAD = 64  # header of 64 bytes for message protocol
-        self.__PORT = 5467
+    def __init__(self, REQ_DEST):
+        self.__STDPORTS = {'LIFE_GEN': 5467, 'CONT_GEN': 5468, 'POP_GEN': 5479, 'PERS_GEN': 5480}
+
+        # address data members
+        self.__PORT = self.__STDPORTS[REQ_DEST]
         self.__IP = socket.gethostbyname(socket.gethostname())
         self.__ADDR = (self.__IP, self.__PORT)
+
+        # functional data members        
+        self.__HEAD = 64  # header of 64 bytes for message protocol
         self.__DCON = "&END"
-        self.__socket = self.define_micro_socket_client()
+        self.__socket = self.define_micro_socket_client() 
     
     def define_micro_socket_client(self):
         """Create and bind socket to port 5467"""
@@ -44,12 +48,11 @@ class micro_client:
         self.__socket.send(send_length) # send header with message length
         self.__socket.send(message) # send request message content
 
-
 # main function for test
 if __name__ == "__main__":
-    client = micro_client()
-    client.send_message("life generator")
-    client.send_message('&END')
+    client = micro_client('LIFE_GEN') # create a life generator request client
+    client.send_message("Generate some life!!")
+    client.send_message("&END")
 
 
 
