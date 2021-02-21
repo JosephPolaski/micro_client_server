@@ -28,7 +28,7 @@ class micro_server:
     
     def __init__(self, call_back, MSERVICE):
         self.__STDPORTS = {'LIFE_GEN': 5467, 'CONT_GEN': 5468, 'POP_GEN': 5479, 'PERS_GEN': 5480}
-        
+
         # address data members        
         self.__PORT = self.__STDPORTS[MSERVICE]
         self.__IP = socket.gethostbyname(socket.gethostname())
@@ -54,8 +54,9 @@ class micro_server:
             client, address = self.__socket.accept()
             request = self.handle_client_requests(client, address)
 
-            # check for closing request
-            client.close() if request == self.__DCON else self.__call_back(request)
+            # process client request
+            response = self.process_client_request(request, client)
+            print(response)
 
     def handle_client_requests(self, client, address):
         print(f"New Connection from {address}")
@@ -84,6 +85,18 @@ class micro_server:
         # blocks until request data recieved
         request = client.recv(data_length).decode('utf-8')        
         return request
+    
+    def process_client_request(self, request, client):
+        """processes a client request with the desired callback function"""
+
+        # check for close request 
+        if request == self.__DCON:
+            client.close()
+            return None
+        else:
+            # return data from responding microservice
+            return self.__call_back(request)
+
 
 # main function for test
 if __name__ == "__main__":
@@ -91,6 +104,7 @@ if __name__ == "__main__":
     # test callback function
     def call_back(request):
         print(f'request is {request}')
+        return 'success'
 
     server = micro_server(call_back, 'LIFE_GEN') # create a life generator server
     server.start_listening()
