@@ -12,6 +12,11 @@ Author: HSKinsley (Sentdex)
 URL: https://www.youtube.com/c/sentdex/about
 Description: We followed this tutorial and used it as a reference for using
 pickling with python sockets
+Sources Cited:
+Title: Socket Programming in Python using Pickle
+Author: StackOverflow -- user: B Morris
+URL: https://stackoverflow.com/questions/53576851/socket-programming-in-python-using-pickle
+Description: I followed this method for sending pickled data over a socket.
 """
 import socket
 import pickle
@@ -48,10 +53,16 @@ class micro_client:
         self.__socket.send(send_length) # send header with message length
         self.__socket.send(message) # send request message content
 
+    def send_data(self, data):
+        """Sends pickled data to the server"""
+        data_string = pickle.dumps(data)
+        self.__socket.send(data_string)
+
 # main function for test
 if __name__ == "__main__":
     client = micro_client('LIFE_GEN') # create a life generator request client
     client.send_message("Generate some life!!")
+    client.send_data("Hobbies;Trains")
     client.send_message("&END")
 
 
