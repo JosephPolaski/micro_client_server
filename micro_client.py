@@ -27,23 +27,29 @@ class micro_client:
             self.__IP = socket.gethostbyname(socket.gethostname())
             self.__ADDR = (self.__IP, self.__PORT)
 
-# functional data members
-self.__HEAD = 64  # header of 64 bytes for message protocol
-    self.__DCON = "&END"
-        self.__socket = self.define_micro_socket_client()
+            # functional data members
+            self.__HEAD = 64  # header of 64 bytes for message protocol
+            self.__DCON = "&END"
+            self.__socket = self.define_micro_socket_client()
     
-        def define_micro_socket_client(self):
+    def define_micro_socket_client(self):
         """Create and bind socket to port 5467"""
         micro_socket_client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         micro_socket_client.connect(self.__ADDR)
-    return micro_socket_client
+        return micro_socket_client
 
-def send_message(self, msg):
-    # send header
-    # send request msg content
-    # sent response
-    # send end thing
-    """Sends the message to the server"""
+    def handle_message_sends(self, header, message):
+        """Handles sending and receiving messages from the server"""
+        self.send_message(header)
+        self.send_message(message)
+        server_response = self.__socket.recv(4096)
+        
+        if server_response != "":
+            self.send_message(self.__DCON)
+            print("Client Done")
+
+    def send_message(self, msg):
+        """Sends the message to the server"""
         message = msg.encode('utf-8')
         message_length = len(message)
         
