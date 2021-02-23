@@ -11,7 +11,7 @@ Title: Python Socket Programming Tutorial
 Author: Tech With Tim
 URL: https://www.youtube.com/watch?v=3QiPPX-KeSc&t=2593s
 Description: We followed this tutorial and used/refactored the code into our
-own implementation to build the server as a prtable class.
+own implementation to build the server as a portable class.
 
 Sources Cited:
 Title: Sockets Tutorial with Python 3 part 3 - sending and receiving Python Objects w/ Pickle
@@ -21,7 +21,6 @@ Description: We followed this tutorial and used it as a reference for using
 pickling with python sockets
 """
 import socket
-import pickle
 
 
 class micro_server:
@@ -56,9 +55,14 @@ class micro_server:
 
             # process client request
             response = self.process_client_request(request, client)
-            print(response)
+            
+            if response is not None:
+               
+                # send response to client
+                self.send_response(client, response)
 
     def handle_client_requests(self, client, address):
+        # print successful connection message
         print(f"New Connection from {address}")
         
         connected = True
@@ -96,15 +100,25 @@ class micro_server:
         else:
             # return data from responding microservice
             return self.__call_back(request)
+    
+    def send_response(self, client, response):
+        """Sends the requested data back to the client"""
+        response_msg = response.encode('utf-8')
+        response_length = len(response_msg)
+        
+        send_length = str(response_length).encode('utf-8')
+        send_length += b' ' * (self.__HEAD - len(send_length))
 
+        client.send(send_length)  # send header with response message length
+        client.send(response_msg)  # send response message content
 
 # main function for test
 if __name__ == "__main__":
 
     # test callback function
     def call_back(request):
-        print(f'request is {request}')
-        return 'success'
+        print(f'I am the Callback Function!! The request is {request}')
+        return 'Success!!'
 
     server = micro_server(call_back, 'LIFE_GEN') # create a life generator server
     server.start_listening()
