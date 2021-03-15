@@ -10,8 +10,8 @@ Sources Cited:
 Title: Python Socket Programming Tutorial
 Author: Tech With Tim
 URL: https://www.youtube.com/watch?v=3QiPPX-KeSc&t=2593s
-Description: We followed this tutorial and used/refactored the code into our
-own implementation to build the server as a portable class.
+Description: We followed this tutorial refactored its methods into our
+own implementation to build the server and client as a portable class.
 """
 import socket
 
