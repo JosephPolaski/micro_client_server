@@ -1,5 +1,5 @@
 """
-    micro_server.py
+    micro_client.py
 
     This module contains the definition of the micro_client class. This class 
     can be instantiated with a keyword in order to specify which microservice it will
@@ -12,13 +12,6 @@
     URL: https://www.youtube.com/watch?v=3QiPPX-KeSc&t=2593s
     Description: We followed this tutorial and used/refactored the code into our
     own implementation to build the server as a portable class.
-
-    Sources Cited:
-    Title: Sockets Tutorial with Python 3 part 3 - sending and receiving Python Objects w/ Pickle
-    Author: HSKinsley (Sentdex)
-    URL: https://www.youtube.com/c/sentdex/about
-    Description: We followed this tutorial and used it as a reference for using
-    pickling with python sockets
     """
 import socket
 
